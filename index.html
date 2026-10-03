@@ -285,7 +285,8 @@
                         <label class="cursor-pointer flex flex-col items-center">
                             <i class="fa-solid fa-camera text-2xl text-blue-500 mb-1"></i>
                             <span class="text-[10px] text-gray-500 font-bold uppercase">Foto Prodotto</span>
-                            <input type="file" accept="image/*" capture="environment" class="hidden" @change="(e) => handleImageUpload(e, 'photoProduct')">
+                            <!-- Modificato qui: rimosso capture="environment" -->
+                            <input type="file" accept="image/*" class="hidden" @change="(e) => handleImageUpload(e, 'photoProduct')">
                         </label>
                         <div v-if="form.photoProduct" class="mt-2 relative">
                             <img :src="form.photoProduct" class="w-full h-20 object-cover rounded-lg border">
@@ -296,7 +297,8 @@
                         <label class="cursor-pointer flex flex-col items-center">
                             <i class="fa-solid fa-camera text-2xl text-green-500 mb-1"></i>
                             <span class="text-[10px] text-gray-500 font-bold uppercase">Valori Nutriz.</span>
-                            <input type="file" accept="image/*" capture="environment" class="hidden" @change="(e) => handleImageUpload(e, 'photoNutritional')">
+                            <!-- Modificato qui: rimosso capture="environment" -->
+                            <input type="file" accept="image/*" class="hidden" @change="(e) => handleImageUpload(e, 'photoNutritional')">
                         </label>
                         <div v-if="form.photoNutritional" class="mt-2 relative">
                             <img :src="form.photoNutritional" class="w-full h-20 object-cover rounded-lg border">
@@ -369,7 +371,6 @@ createApp({
                 return matchName && matchCat;
             });
         },
-        // Sistema logico per i suggerimenti Aggiunta Rapida
         quickSuggestions() {
             let counts = {};
             this.products.forEach(p => {
@@ -384,7 +385,7 @@ createApp({
             if(this.form.name.trim() !== '') {
                 arraySugg = arraySugg.filter(s => s.name.toLowerCase().includes(this.form.name.toLowerCase()));
             }
-            return arraySugg.slice(0, 10); // Mostra i top 10 pertinenti
+            return arraySugg.slice(0, 10);
         },
         stats() {
             let filtered = this.productsOfSelectedMonth;
@@ -426,7 +427,6 @@ createApp({
             const savedCats = await localforage.getItem('spesatrack_categories');
             if (savedCats) this.categories = savedCats;
         },
-        // BUG FIX SALVATAGGIO: Uso stringify per pulire gli oggetti Proxy di Vue 3 per IndexedDB
         async saveData() {
             try {
                 const p = JSON.parse(JSON.stringify(this.products));
@@ -448,7 +448,6 @@ createApp({
             this.isEditing = false;
             this.isModalOpen = true;
         },
-        // AUTOFIL da storico
         useSuggestion(sugg) {
             this.form.name = sugg.name;
             this.form.category = sugg.category || this.categories[0];
